@@ -1,0 +1,3 @@
+qa-output/
+*.tgz
+.DS_Store
