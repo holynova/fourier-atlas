@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>傅里叶地图实验室 · 用旋转的圆描绘世界</title>
-<meta name="description" content="从一个旋转圆开始，每画完一圈增加一个圆，逐步重建中国、美国、日本等十个国家的轮廓。可交互的傅里叶本轮绘图实验。">
+<meta name="description" content="从一个旋转圆开始，每画完一圈增加一个圆，逐步重建含台湾的中国地图、十个国家与八个中国省区的轮廓。可交互的傅里叶本轮绘图实验。">
 <meta name="theme-color" content="#101716"><meta property="og:title" content="傅里叶地图实验室"><meta property="og:description" content="一个圆，一个世界。从圆周运动到国家轮廓，亲眼看见傅里叶级数的渐进逼近。"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css">
 <script src="countries.js" defer></script><script src="app.js" defer></script>
 </head>
 <body>
 <header class="masthead"><a class="brand" href="./" aria-label="傅里叶地图实验室首页"><span class="brand-mark" aria-hidden="true">◎</span><span>FOURIER <b>ATLAS</b></span></a><span class="edition">交互数学实验 · NO. 01</span><a class="about-link" href="#principle">它是怎么画出来的？ <span aria-hidden="true">↗</span></a></header>
 <main>
-<section class="intro"><div><p class="eyebrow">THE WORLD, ONE CIRCLE AT A TIME</p><h1>用旋转的圆，<br class="mobile-break">描绘世界<span>。</span></h1><p class="subtitle">从一个圆开始，每画完一圈，就再加一个。<br class="mobile-break">看简单的旋转，慢慢长成你熟悉的版图。</p></div><div class="intro-note"><span class="small-orbit" aria-hidden="true"></span><p>10 个国家<br><span>无数个接近的瞬间</span></p></div></section>
+<section class="intro"><div><p class="eyebrow">THE WORLD, ONE CIRCLE AT A TIME</p><h1>用旋转的圆，<br class="mobile-break">描绘世界<span>。</span></h1><p class="subtitle">从一个圆开始，每画完一圈，就再加一个。<br class="mobile-break">看简单的旋转，慢慢长成你熟悉的版图。</p></div><div class="intro-note"><span class="small-orbit" aria-hidden="true"></span><p>10 个国家 · 8 个中国省区<br><span>无数个接近的瞬间</span></p></div></section>
 <section class="lab" aria-label="傅里叶地图交互实验">
-<aside class="sidebar"><div class="section-label"><h2>选择一片陆地</h2><span>01 — 10</span></div><div id="countries" class="country-grid" role="group" aria-label="选择国家"></div><div class="selection-note"><span class="dot"></span><p id="country-note"></p></div></aside>
+<aside class="sidebar"><div class="section-label"><h2>选择一片陆地</h2><span id="collection-range">01 — 10</span></div><div class="map-groups" role="group" aria-label="地图分类"><button type="button" data-group="world" aria-pressed="true" aria-controls="countries">世界国家</button><button type="button" data-group="province" aria-pressed="false" aria-controls="provinces">中国省区</button></div><div id="countries" class="country-grid" role="group" aria-label="选择国家"></div><div id="provinces" class="country-grid province-grid" role="group" aria-label="选择中国省级行政区" hidden></div><div class="selection-note"><span class="dot"></span><p id="country-note"></p></div></aside>
 <div class="experiment">
 <div class="canvas-header"><div><p class="eyebrow" id="country-en">CHINA</p><h2 id="country-name">中国</h2></div><div class="live-state"><span id="state-dot"></span><span id="state-text">渐进绘制中</span></div></div>
 <div class="canvas-wrap"><canvas id="drawing" role="img" aria-label="旋转圆叠加绘制国家轮廓，虚线为原始地理轮廓，绿色实线为重建轨迹。">你的浏览器不支持 Canvas，请使用新版浏览器。</canvas><div class="canvas-coordinate" aria-hidden="true">FOURIER RECONSTRUCTION<br>LOCAL EQUIRECTANGULAR</div><div class="circle-number"><strong id="circle-count">1</strong><span>个旋转圆 <small>/ 每条轮廓</small></span></div></div>
@@ -25,6 +25,6 @@
 </section>
 <section class="evolution" aria-label="不同圆数量的轮廓对比"><div class="evolution-heading"><div><p class="eyebrow">FROM MOTION TO FORM</p><h2>细节，一圈一圈地出现。</h2></div><p>点击任一阶段，查看完整的重建轮廓。</p></div><div id="stages" class="stages"></div></section>
 <section class="principle" id="principle"><div class="principle-title"><p class="eyebrow">A LITTLE MATH, A LOT OF WONDER</p><h2>一条复杂的线，<br>是许多简单的转动。</h2><p class="formula">z(t) = c₀ + Σ cₖ e<sup>i2πkt</sup></p></div><div class="principle-steps"><article><span>01</span><div><h3>把边界变成一串点</h3><p>沿真实地理轮廓等距采样，把每个点的位置写成复数：横坐标 + i × 纵坐标。</p></div></article><article><span>02</span><div><h3>让每个频率变成一个圆</h3><p>离散傅里叶变换算出不同频率的旋转向量：长度决定圆的半径，频率决定转速和方向，相位决定起始角度。</p></div></article><article><span>03</span><div><h3>叠加旋转，留下轨迹</h3><p>将向量首尾相接，末端就是笔尖。按振幅从大到小逐个加入，逐步减小对采样轮廓的均方误差，显现更多细节。</p></div></article></div></section>
-<footer><div><span class="footer-brand">FOURIER ATLAS</span><span>用数学，重新认识熟悉的形状。</span></div><p>地理数据：<a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/" target="_blank" rel="noopener">Natural Earth · 1:110m ↗</a>（公共领域）。采用局部等距圆柱投影；保留数据中的陆地外轮廓，法国仅展示欧洲本土。该尺度已简化海岸与小岛，不绘制内陆孔洞；边界按数据源呈现，用于数学演示。</p><p>各陆地轮廓独立使用同样数量的旋转圆，同时绘制，不连接跨海线段。每条轮廓采样 512 点，中心位置由常数项 c₀ 决定。</p></footer>
+<footer><div><span class="footer-brand">FOURIER ATLAS</span><span>用数学，重新认识熟悉的形状。</span></div><p>地理数据：<a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/" target="_blank" rel="noopener">Natural Earth · 1:110m ↗</a>与 <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-1-states-provinces/" target="_blank" rel="noopener">省级行政区 · 1:50m ↗</a>（公共领域）。中国地图合并展示大陆、海南与台湾等陆地轮廓；新增新疆、西藏、内蒙古、青海、四川、黑龙江、甘肃、云南 8 个省级行政区。采用局部等距圆柱投影，法国仅展示欧洲本土。海岸与小岛依数据尺度简化，不绘制内陆孔洞；用于数学演示。</p><p>各陆地轮廓独立使用同样数量的旋转圆，同时绘制，不连接跨海线段。每条轮廓采样 512 点，中心位置由常数项 c₀ 决定。</p></footer>
 </main>
 </body></html>
