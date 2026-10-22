@@ -10,3 +10,18 @@
 .map-groups button:hover{color:var(--ink);background:#202c26}
 .map-groups button[aria-pressed=true]{background:#2a3d31;color:var(--mint);border-color:#496f5c}
 @media(max-width:720px){.map-groups{margin-bottom:12px}.map-groups button{min-height:40px}.province-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.map-groups{grid-template-columns:repeat(3,minmax(0,1fr))}
+.map-groups button{font-size:10px;white-space:nowrap}
+.group-note{font-size:10px;line-height:1.7;color:var(--muted);margin:-5px 0 15px}
+.country{position:relative}
+.population-rank{position:absolute;left:5px;top:4px;font:9px var(--mono);color:var(--muted)}
+.country .population{font:9px var(--mono);color:var(--muted);margin-top:-3px}
+.country[data-shape=true] svg path{fill:none;stroke:currentColor;stroke-width:1;opacity:.9}
+.legend-line.history{border-color:var(--mint);opacity:.3}
+.progression-settings{display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:11px;color:#c1d0c5;padding:0 0 14px}
+.progression-settings label{display:flex;gap:6px;align-items:center;min-height:32px}
+.progression-settings input[type=number]{width:53px;min-height:30px;padding:4px 5px;background:#213026;border:1px solid #3b4d3f;border-radius:4px;color:var(--mint);font:12px var(--mono)}
+.progression-settings input[type=checkbox]{accent-color:var(--mint);width:14px;height:14px;margin:0}
+.progression-settings select{background:#213026;border:1px solid #3b4d3f;border-radius:4px;color:var(--ink);font-size:11px;padding:5px;min-height:30px}
+.history-hint{font-size:9px;color:var(--muted);margin-left:auto}
+@media(max-width:720px){.province-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.complex-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.country .population{font-size:8px}.population-rank{font-size:8px;left:2px;top:1px}.progression-settings{gap:5px 13px}.progression-settings input[type=number],.progression-settings select{font-size:16px;min-height:36px}.progression-settings input[type=number]{width:54px}.group-note{margin:0 0 12px}.history-hint{margin-left:0;width:100%;font-size:10px}.map-groups button{font-size:11px}.plot-legend{gap:10px 12px}}
