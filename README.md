@@ -8,7 +8,7 @@ Draw maps and intricate curves with rotating Fourier epicycles. Explore 10 count
 
 ## 在线体验 / Live Demo
 
-- [Cloudflare Demo](https://fourier-atlas.xiaosang.cc/)
+- [Cloudflare Demo（待验证）](https://xiaosang.cc/fourier-atlas/)
 - [GitHub Repo](https://github.com/holynova/fourier-atlas)
 
 <img src="./assets/qr.png" width="180" alt="扫码访问 Fourier Atlas">
@@ -30,7 +30,7 @@ npm run deploy:check
 npm run deploy
 ```
 
-Cloudflare Workers · `fourier-atlas.xiaosang.cc` · v1.0.0
+Cloudflare Workers · `xiaosang.cc/fourier-atlas/` · v1.0.0
 
 源码与部署配置统一使用 `main`，从同一提交手动发布。生产资源位于 `dist/`，无需构建。用 NumPy 运行 `prepare_data.py` 可重新生成傅里叶系数。
 
