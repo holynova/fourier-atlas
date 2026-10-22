@@ -1,6 +1,6 @@
 """Generate local Fourier data from Natural Earth Admin 0 (110m) and Admin 1 (50m).
 Projection: locally centered equirectangular, standard parallel at lat0.
-512 equal-arclength samples per external ring; DC plus 128 largest nonzero terms.
+2048 equal-arclength samples per external ring; DC plus 1024 largest nonzero terms.
 Taiwan's source geometry is appended to the China selection, using the same projection.
 """
 import json, math
@@ -26,11 +26,11 @@ def make_map(code,name,en,lon0,lat0,source_polys,group,note,full_name=None,plana
   xy=xy[np.r_[True,np.linalg.norm(np.diff(xy,axis=0),axis=1)>1e-9]]
   xy=np.vstack([xy,xy[0]])
   cum=np.r_[0,np.cumsum(np.linalg.norm(np.diff(xy,axis=0),axis=1))]
-  d=np.arange(512)/512*cum[-1]
+  d=np.arange(2048)/2048*cum[-1]
   z=np.interp(d,cum,xy[:,0])+1j*np.interp(d,cum,xy[:,1])
-  c=np.fft.fft(z)/512
-  order=sorted(range(1,512),key=lambda k:abs(c[k]),reverse=True)[:128]
-  item={'points':np.round(xy,5).tolist(),'center':[round(c[0].real,6),round(c[0].imag,6)],'length':round(cum[-1],5),'terms':[[k if k<=256 else k-512,round(abs(c[k]),7),round(float(np.angle(c[k])),7)] for k in order], 'energy':round(float(np.sum(np.abs(c[1:])**2)),8)}
+  c=np.fft.fft(z)/2048
+  order=sorted(range(1,2048),key=lambda k:abs(c[k]),reverse=True)[:1024]
+  item={'points':np.round(xy,5).tolist(),'center':[round(c[0].real,6),round(c[0].imag,6)],'length':round(cum[-1],5),'terms':[[k if k<=1024 else k-2048,round(abs(c[k]),7),round(float(np.angle(c[k])),7)] for k in order], 'energy':round(float(np.sum(np.abs(c[1:])**2)),8)}
   if planar:item['points']=np.round(np.column_stack([np.r_[z.real,z.real[0]],np.r_[z.imag,z.imag[0]]]),5).tolist()
   if label:item['label']=label
   rings.append(item)
@@ -43,7 +43,7 @@ for code,name,en,lon0,lat0 in choices:
  note='欧洲本土与科西嘉岛' if code=='FRA' else '各陆地轮廓独立绘制'
  if code=='CHN':
   taiwan=next(f for f in features if f['properties']['ADM0_A3']=='TWN')
-  source_polys.extend((p,'台湾') for p in polygons(taiwan))
+  source_polys.extend((p,None) for p in polygons(taiwan))
   note='含台湾、海南 · 岛屿独立绘制'
  out.append(make_map(code,name,en,lon0,lat0,source_polys,'world',note))
 for rank,(code,name,population) in enumerate(province_choices,1):

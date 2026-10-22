@@ -40,3 +40,7 @@
 .explanation footer{padding-bottom:0}
 @media(max-width:720px){.masthead{height:60px}.intro{padding:28px 0}.canvas-wrap{height:330px;margin-top:14px}.evolution{margin-top:20px}.stage-label>span:last-child{margin-top:0}.explanation{margin-top:26px}}
 @media(max-width:400px){.canvas-wrap{height:285px}.intro h1{font-size:29px}}
+.stage canvas{width:100%;height:auto;aspect-ratio:17/11;object-fit:contain}
+.progression-settings input[type=number]{width:68px}
+.progression-settings input[readonly]{color:var(--muted);background:transparent}
+@media(max-width:720px){.progression-settings input[type=number]{width:76px}}
