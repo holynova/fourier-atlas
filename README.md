@@ -8,7 +8,7 @@ Draw maps and intricate curves with rotating Fourier epicycles. Explore 10 count
 
 ## 在线体验 / Live Demo
 
-- [Cloudflare Demo（待验证）](https://xiaosang.cc/fourier-atlas/)
+- [Cloudflare Demo](https://xiaosang.cc/fourier-atlas/)
 - [GitHub Repo](https://github.com/holynova/fourier-atlas)
 
 <img src="./assets/qr.png" width="180" alt="扫码访问 Fourier Atlas">
