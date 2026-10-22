@@ -20,11 +20,10 @@ function makeCurve(r,n){const xy=new Float64Array((SAMPLES+1)*2);for(let j=0;j<=
 function geoBounds(c){let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;for(const r of c.rings)for(const [x,y] of r.points){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y);}return {x0,y0,x1,y1};}
 function fixedCamera(c){const b=geoBounds(c);for(const r of c.rings)for(let j=0;j<64;j++)endpoint(r,128,j/64,(x,y,nx,ny,radius)=>{b.x0=Math.min(b.x0,x-radius);b.x1=Math.max(b.x1,x+radius);b.y0=Math.min(b.y0,y-radius);b.y1=Math.max(b.y1,y+radius);});return b;}
 function projection(b,w,h,pad=16){const scale=Math.min((w-pad*2)/(b.x1-b.x0),(h-pad*2)/(b.y1-b.y0));return {scale,x:w/2-(b.x0+b.x1)*scale/2,y:h/2-(b.y0+b.y1)*scale/2};}
-function plotProjection(){const top=width<420?60:0,p=projection(camera,width,height-top,18);p.y+=top;return p;}
+function plotProjection(){return projection(camera,width,height,18);}
 function outlinePath(c){const p=projection(geoBounds(c),80,50,3);return c.rings.map(r=>'M'+r.points.map(([x,y])=>(p.x+x*p.scale).toFixed(2)+','+(p.y+y*p.scale).toFixed(2)).join('L')+'Z').join('');}
 function showGroup(group){
  for(const [g,id] of Object.entries(groups))$(id).hidden=group!==g;
- $('collection-range').textContent='01 — '+String(maps.filter(c=>c.group===group).length).padStart(2,'0');
  $('group-note').hidden=group!=='province';
  document.querySelectorAll('[data-group]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.group===group)));
 }
@@ -39,14 +38,13 @@ function mapsUI(){
 function announce(text){$('status').textContent=text;}
 function updateControls(){
  const max=maxTerms();
- $('circle-count').textContent=count;$('terms').max=max;$('terms').value=count;$('terms-output').value=count;$('range-max').textContent=max+' · 更多细节';
+ $('terms').max=max;$('terms').value=count;$('terms-output').value=count;
  $('play').textContent=running?'暂停':(phase===1&&count===max&&$('auto').checked?'重新播放':'播放');
  $('next').disabled=count>=max&&$('auto').checked;
  const finished=phase===1&&count===max&&$('auto').checked&&!running;
  $('state-text').textContent=finished?'本次渐进绘制完成':running?($('auto').checked?'渐进绘制中':'单圈循环中'):'已暂停';
  $('state-text').parentElement.classList.toggle('is-paused',!running);
  document.querySelectorAll('.stage').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.n===count)));
- $('history-count').textContent=history.length;
  document.body.dataset.count=count;document.body.dataset.country=country.id;document.body.dataset.running=String(running);document.body.dataset.history=history.length;
 }
 function clearHistory(){history=[];historyDirty=true;}
@@ -62,7 +60,6 @@ function setCount(n,{complete=false,notify=true}={}){
 function choose(c){
  country=c;lastSelections[c.group]=c;showGroup(c.group);camera=fixedCamera(c);clearHistory();count=1;phase=0;hold=0;running=!reduced;
  $('country-name').textContent=c.fullName;$('drawing').setAttribute('aria-label',c.fullName+'傅里叶轮廓绘图。'+c.note+'。虚线为原始轮廓，浅色实线为已完成的历史轮廓，亮绿色实线为当前轨迹。');
- $('country-en').textContent=c.en.toUpperCase();$('projection-label').textContent=c.group==='complex'?'PARAMETRIC CURVE':'LOCAL EQUIRECTANGULAR';
  $('country-note').textContent=c.rings.length+' 条独立轮廓 · '+c.note;
  document.querySelectorAll('.country').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.country===c.id)));
  buildCurves();stagesUI();resize();updateControls();announce('已切换至'+c.name+'。从每条轮廓 1 个旋转圆开始，每圈增加 '+increment()+' 个，至 '+maxTerms()+' 个。');
@@ -90,14 +87,14 @@ function draw(){
   ctx.fillStyle=color.pen;ctx.beginPath();ctx.arc(p.x+tip[0]*p.scale,p.y+tip[1]*p.scale,index===0?3.6:2.1,0,TAU);ctx.fill();
  });
  for(const r of country.rings){if(!r.label)continue;const x=p.x+r.center[0]*p.scale,y=p.y+r.center[1]*p.scale;ctx.globalAlpha=1;ctx.font='11px -apple-system, sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle='#cfdfd2';ctx.fillText(r.label,Math.min(width-31,x+12),y);}
- const percent=Math.floor(phase*100);$('lap-fill').style.width=percent+'%';$('lap-value').textContent=percent+'%';$('round-detail').textContent=count+' 个圆 · '+percent+'%';
+ const percent=Math.floor(phase*100);$('lap-fill').style.width=percent+'%';$('lap-value').textContent=percent+'%';
 }
 function resize(){width=canvas.clientWidth;height=canvas.clientHeight;dpr=Math.min(devicePixelRatio||1,2);for(const c of [canvas,historyLayer]){c.width=Math.round(width*dpr);c.height=Math.round(height*dpr);}ctx.setTransform(dpr,0,0,dpr,0,0);historyCtx.setTransform(dpr,0,0,dpr,0,0);historyDirty=true;draw();}
 function stagesUI(){
- const stages=$('stages');stages.replaceChildren();const descriptions=['最初的圆','大致走向','形状初现','轮廓细节','精细轮廓'];
+ const stages=$('stages');stages.replaceChildren();
  [1,6,21,51,100].forEach((n,i)=>{
   const button=document.createElement('button');button.type='button';button.className='stage';button.dataset.n=n;button.setAttribute('aria-pressed',String(n===count));button.setAttribute('aria-label','查看每条轮廓 '+n+' 个旋转圆的完整重建图');
-  button.innerHTML='<canvas aria-hidden="true" width="340" height="220"></canvas><span class="stage-label"><span>'+String(n).padStart(2,'0')+' 个圆</span><span>'+descriptions[i]+'</span></span>';
+  button.innerHTML='<canvas aria-hidden="true" width="340" height="220"></canvas><span class="stage-label"><span>'+n+' 个圆</span></span>';
   button.onclick=()=>{running=false;if(n>maxTerms())$('max-terms').value='100';setCount(n,{complete:true});};stages.appendChild(button);
   const cx=button.querySelector('canvas').getContext('2d'),p=projection(geoBounds(country),340,220,18);for(const r of country.rings)drawLine(cx,makeCurve(r,n),p,SAMPLES,color.trace,2.3);
  });
