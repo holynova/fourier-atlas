@@ -6,6 +6,8 @@
 <meta name="description" content="从一个旋转圆开始，步长随圆数渐增，默认到 512 个圆，最高 1024 个圆。探索十国地图、人口前十省区和复杂曲线，保留浅色历史轨迹。可交互的傅里叶本轮绘图实验。">
 <meta name="theme-color" content="#101716"><meta property="og:title" content="傅里叶地图实验室"><meta property="og:description" content="一个圆，一个世界。从圆周运动到国家轮廓，亲眼看见傅里叶级数的渐进逼近。"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css">
 <script src="countries.js" defer></script><script src="app.js" defer></script>
+<link rel="canonical" href="https://fourier-atlas.xiaosang.cc/">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="e01c9f78-4607-4e60-b01c-77c8190b12b4"></script>
 </head>
 <body>
 <header class="masthead"><a class="brand" href="./" aria-label="傅里叶地图实验室首页"><span class="brand-mark" aria-hidden="true">◎</span><span>FOURIER <b>ATLAS</b></span></a></header>
@@ -24,7 +26,8 @@
 </div>
 </section>
 <section class="evolution" aria-label="不同圆数量的轮廓对比"><h2 class="sr-only">不同圆数的轮廓对比</h2><div id="stages" class="stages"></div></section>
-<details class="explanation" id="principle"><summary>原理与数据</summary><section class="principle"><div class="principle-title"><h2>傅里叶本轮绘图</h2><p class="formula">z(t) = c₀ + Σ cₖ e<sup>i2πkt</sup></p></div><div class="principle-steps"><article><span>01</span><div><h3>把边界变成一串点</h3><p>沿地理边界或数学曲线等距采样，把每个点的位置写成复数：横坐标 + i × 纵坐标。</p></div></article><article><span>02</span><div><h3>让每个频率变成一个圆</h3><p>离散傅里叶变换算出不同频率的旋转向量：长度决定圆的半径，频率决定转速和方向，相位决定起始角度。</p></div></article><article><span>03</span><div><h3>叠加旋转，留下轨迹</h3><p>将向量首尾相接，末端就是笔尖。按振幅从大到小逐个加入，逐步减小对采样轮廓的均方误差，显现更多细节。</p></div></article></div></section>
-<footer><p>地理数据：<a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/" target="_blank" rel="noopener">Natural Earth · 1:110m ↗</a>与 <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-1-states-provinces/" target="_blank" rel="noopener">省级行政区 · 1:50m ↗</a>（公共领域）。中国地图合并展示大陆、海南与台湾等陆地轮廓；省区按 <a href="https://tj.jiangsu.gov.cn/2025/nj21/nj2101.htm" target="_blank" rel="noopener">《江苏统计年鉴 2025》附录全国分省数据 ↗</a>中的 2024 年末常住人口排序（大陆 31 省区市口径，单位：万人）：广东、山东、河南、江苏、四川、河北、浙江、湖南、安徽、湖北。采用局部等距圆柱投影，法国仅展示欧洲本土。海岸与小岛依数据尺度简化，不绘制内陆孔洞；用于数学演示。</p><p>各独立轮廓使用同样数量的旋转圆，同时绘制，不连接跨海线段。复杂图形由参数方程或分形算法生成，包括玫瑰线、蝴蝶曲线、内旋轮线、李萨如线、科赫雪花、超公式曼陀罗、三叶结投影与星芒曲线。每条轮廓采样 2048 点，中心位置由常数项 c₀ 决定。</p></footer></details>
+<details class="explanation" id="principle"><summary>原理</summary><section class="principle"><div class="principle-title"><h2>傅里叶本轮绘图</h2><p class="formula">z(t) = c₀ + Σ cₖ e<sup>i2πkt</sup></p></div><div class="principle-steps"><article><span>01</span><div><h3>把边界变成一串点</h3><p>沿地理边界或数学曲线等距采样，把每个点的位置写成复数：横坐标 + i × 纵坐标。</p></div></article><article><span>02</span><div><h3>让每个频率变成一个圆</h3><p>离散傅里叶变换算出不同频率的旋转向量：长度决定圆的半径，频率决定转速和方向，相位决定起始角度。</p></div></article><article><span>03</span><div><h3>叠加旋转，留下轨迹</h3><p>将向量首尾相接，末端就是笔尖。按振幅从大到小逐个加入，逐步减小对采样轮廓的均方误差，显现更多细节。</p></div></article></div></section>
+</details>
+<footer class="release-footer"><a href="https://github.com/holynova/fourier-atlas" target="_blank" rel="noopener">GitHub</a><span>v1.0.0</span></footer>
 </main>
 </body></html>

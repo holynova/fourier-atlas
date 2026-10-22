@@ -1,0 +1,15 @@
+{
+  "name": "fourier-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive Fourier epicycles for maps and mathematical curves",
+  "scripts": {
+    "dev": "python3 -m http.server 4173 --directory dist",
+    "check": "node --check dist/app.js",
+    "deploy:check": "wrangler deploy --dry-run --config wrangler.jsonc",
+    "deploy": "wrangler deploy --config wrangler.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "4.128.0"
+  }
+}

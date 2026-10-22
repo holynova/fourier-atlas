@@ -1,3 +1,9 @@
 qa-output/
 *.tgz
 .DS_Store
+node_modules/
+.wrangler/
+.env
+.env.*
+.dev.vars
+.dev.vars.*

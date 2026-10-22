@@ -1,50 +1,37 @@
 # Fourier Atlas / 傅里叶地图实验室
 
-通过傅里叶本轮绘图逐步重建轮廓，支持 3 组内容：10 个国家、2024 年人口前 10 的中国省区，以及 8 种复杂数学图形。中国地图合并展示台湾、海南等陆地外轮廓。
+用一串旋转圆描绘地图与复杂曲线。包含 10 个国家、人口前十省区和 8 种数学图形；支持渐增或固定步长、最多 1024 个圆、历史轨迹叠加与阶段对比，默认终点 512。
 
-## 本地预览
+Draw maps and intricate curves with rotating Fourier epicycles. Explore 10 countries, 10 populous provinces and 8 mathematical shapes, with adaptive or fixed increments, up to 1,024 circles, continuous playback and fading history. The default endpoint is 512.
 
-`python3 -m http.server 4173 --directory dist`，打开 http://localhost:4173 。无需安装、构建或外部运行时资源。
+![Fourier Atlas screenshot](./assets/screenshot.png)
 
-## 渐进绘制
+## 在线体验 / Live Demo
 
-- 默认终点 **512**，支持输入 1–**1024** 的整数。
-- 默认「渐增」步长：圆数 <8 时 +1，8–31 时 +4，32–95 时 +8，96–191 时 +12，192–383 时 +24，384–767 时 +48，768 及以上 +64。每轮依据当前圆数选择步长，最后一步截到终点。
-- 可切换「固定」步长，输入每圈增加 1–1024 个圆。
-- 每圈用时 0.5–6 秒；一圈结束立即进入下一圈，保留溢出的帧时间，无圈间停留。
-- 保留浅色历史轮廓。历史画布按新增轮廓增量合成，避免高圆数时每圈重画全部历史；尺寸变化后重建。
-- 「历史轨迹」控制历史可见性；切换图形、重新开始或终点后重新播放会清空历史。同一圆数仅记一次历史。
-- 暂停、下一圈、手动选择圆数和阶段预览均可用；阶段图随终点更新，画布固定 17:11 比例，等比例显示。
-- 台湾轮廓保留，画布不显示文字标记。
-- 减少动态效果偏好下初始暂停；后台标签页暂停时间推进。
+- [Cloudflare Demo](https://fourier-atlas.xiaosang.cc/)
+- [GitHub Repo](https://github.com/holynova/fourier-atlas)
 
-## 内容和来源
+<img src="./assets/qr.png" width="180" alt="扫码访问 Fourier Atlas">
 
-地理数据来自公共领域 [Natural Earth Admin 0 1:110m](https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/) 与 [Admin 1 1:50m](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-1-states-provinces/)。原始 GeoJSON 保存在 `countries-source.geojson` 与 `provinces-source.geojson`。
+## 本地运行 / Run locally
 
-省区按 **2024 年末常住人口**（大陆 31 省区市口径）降序取前十，单位：万人。数据来自江苏省统计局 [《江苏统计年鉴 2025》附录 1-1 全国各地区人口及地区生产总值](https://tj.jiangsu.gov.cn/2025/nj21/nj2101.htm)。明确使用统一年份，页面未声称为最新估计。
+```bash
+npm ci
+npm run dev
+```
 
-| 排名 | 省区 | 常住人口（万人） |
-|---|---|---|
-|1|广东|12780|
-|2|山东|10080|
-|3|河南|9785|
-|4|江苏|8526|
-|5|四川|8364|
-|6|河北|7378|
-|7|浙江|6670|
-|8|湖南|6539|
-|9|安徽|6123|
-|10|湖北|5834|
+打开 / Open `http://localhost:4173`.
 
-复杂图形由本地公式/算法生成：十二瓣玫瑰、蝴蝶曲线、内旋轮线花环、5:4 李萨如线、三阶科赫雪花、超公式曼陀罗、三叶结平面投影、13/29 次谐波星芒。无需外部图片。
+## 检查与发布 / Check and deploy
 
-## 生成数据
+```bash
+npm run check
+npm run deploy:check
+npm run deploy
+```
 
-`prepare_data.py` 使用 NumPy 生成 `dist/countries.js`。地理轮廓采用以本地纬度为标准纬线的等距圆柱投影；数学曲线直接使用平面坐标。每条闭合外轮廓按弧长取 2048 点，复数 FFT 常数项决定中心位置，非零项按幅度降序取前 1024 项。负频率表示反向旋转。
+Cloudflare Workers · `fourier-atlas.xiaosang.cc` · v1.0.0
 
-所有陆地外轮廓独立处理，避免跨海连线；法国仅显示欧洲本土与科西嘉岛。小岛和海岸线按数据尺度简化，内陆孔洞不展示。每条独立轮廓使用相同数量的旋转圆。
+源码与部署配置统一使用 `main`，从同一提交手动发布。生产资源位于 `dist/`，无需构建。用 NumPy 运行 `prepare_data.py` 可重新生成傅里叶系数。
 
-按幅度排序加入系数使采样均方误差随项数增加而不增，不保证每个局部点的偏差都单调减少。
-
-轨迹用 2048 点的逆 FFT 重建，复杂度 O(N log N)；旋转链仍按全部选中系数计算端点，仅省略小于 0.4 屏幕像素的圆和半径线绘制，减少高圆数下的无效绘图。
+Source and deployment configuration share `main`. Deploy manually from the same commit. The buildless static output lives in `dist/`. Run `prepare_data.py` with NumPy to regenerate coefficients.
