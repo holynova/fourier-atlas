@@ -6,7 +6,8 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const groups={world:'countries',province:'provinces',complex:'complex-shapes'};
 const lastSelections=Object.fromEntries(Object.keys(groups).map(g=>[g,maps.find(c=>c.group===g)]));
 const color={trace:'#8cdeba',pen:'#edac7e',circle:'#9bbfa8',original:'#8fa996'};
-let country=maps[0],count=1,phase=0,running=!reduced,last=0,curves=[],camera=null,width=0,height=0,dpr=1;
+const initialShape=new URLSearchParams(location.search).get('shape')||document.body.dataset.defaultShape;
+let country=maps.find(c=>c.id===initialShape)||maps[0],count=1,phase=0,running=!reduced,last=0,curves=[],camera=null,width=0,height=0,dpr=1;
 let history=[],historyDirty=true,historyPainted=0,fixedIncrement=5;
 function maxTerms(){const n=Number($('max-terms').value);return Number.isFinite(n)&&n>=1?Math.min(1024,Math.round(n)):512;}
 function adaptiveIncrement(n){if(n<8)return 1;if(n<32)return 4;if(n<96)return 8;if(n<192)return 12;if(n<384)return 24;if(n<768)return 48;return 64;}
@@ -75,6 +76,8 @@ function setCount(n,{complete=false,notify=true}={}){
 }
 function choose(c){
  country=c;lastSelections[c.group]=c;showGroup(c.group);camera=fixedCamera(c);clearHistory();count=1;phase=0;running=!reduced;
+ if($('clean-view'))$('clean-view').href='pure.html?shape='+encodeURIComponent(c.id);
+ if($('full-view'))$('full-view').href='./?shape='+encodeURIComponent(c.id);
  $('country-name').textContent=c.fullName;$('drawing').setAttribute('aria-label',c.fullName+'傅里叶轮廓绘图。'+c.note+'。虚线为原始轮廓，浅色实线为已完成的历史轮廓，亮绿色实线为当前轨迹。');
  $('country-note').textContent=c.rings.length+' 条独立轮廓 · '+c.note;
  document.querySelectorAll('.country').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.country===c.id)));
@@ -97,8 +100,9 @@ function draw(){
  country.rings.forEach((r,index)=>{
   const tip=endpoint(r,count,phase,$('show-circles').checked?(x,y,nx,ny,radius)=>{
    if(radius*p.scale<.4)return;
-   if(radius*p.scale>.6){ctx.globalAlpha=.22;ctx.strokeStyle=color.circle;ctx.lineWidth=.75;ctx.beginPath();ctx.arc(p.x+x*p.scale,p.y+y*p.scale,radius*p.scale,0,TAU);ctx.stroke();}
-   ctx.globalAlpha=.43;ctx.strokeStyle=color.circle;ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(p.x+x*p.scale,p.y+y*p.scale);ctx.lineTo(p.x+nx*p.scale,p.y+ny*p.scale);ctx.stroke();
+   if(radius*p.scale>.6){ctx.globalAlpha=$('emphasize-circles').checked?(index===0?.78:.22):.22;ctx.strokeStyle=$('emphasize-circles').checked&&index===0?'#e6b77d':color.circle;ctx.lineWidth=$('emphasize-circles').checked&&index===0?1.25:.75;ctx.beginPath();ctx.arc(p.x+x*p.scale,p.y+y*p.scale,radius*p.scale,0,TAU);ctx.stroke();}
+   ctx.globalAlpha=$('emphasize-circles').checked&&index===0?.86:.43;ctx.strokeStyle=$('emphasize-circles').checked&&index===0?'#efd5ad':color.circle;ctx.lineWidth=$('emphasize-circles').checked&&index===0?1:.8;ctx.beginPath();ctx.moveTo(p.x+x*p.scale,p.y+y*p.scale);ctx.lineTo(p.x+nx*p.scale,p.y+ny*p.scale);ctx.stroke();
+   if($('emphasize-circles').checked&&index===0&&radius*p.scale>1.5){ctx.beginPath();ctx.arc(p.x+x*p.scale,p.y+y*p.scale,1.6,0,TAU);ctx.fillStyle='#efd5ad';ctx.fill();}
   }:null);
   ctx.globalAlpha=1;const end=Math.floor(phase*SAMPLES);drawLine(ctx,curves[index],p,end,color.trace,1.9);
   if(end<SAMPLES){ctx.beginPath();ctx.moveTo(p.x+curves[index][end*2]*p.scale,p.y+curves[index][end*2+1]*p.scale);ctx.lineTo(p.x+tip[0]*p.scale,p.y+tip[1]*p.scale);ctx.strokeStyle=color.trace;ctx.lineWidth=1.9;ctx.stroke();}
@@ -145,7 +149,15 @@ $('increment').onchange=()=>{const n=Number($('increment').value);fixedIncrement
 $('step-mode').onchange=()=>{updateControls();};
 $('max-terms').onchange=()=>{$('max-terms').value=maxTerms();if(count>maxTerms())setCount(maxTerms(),{complete:true});if(count===maxTerms()&&phase===1&&$('auto').checked)running=false;stagesUI();updateControls();};
 $('auto').onchange=()=>{updateControls();};
-for(const id of ['show-circles','show-outline','show-history'])$(id).onchange=draw;
+for(const id of ['show-outline','show-history'])$(id).onchange=draw;
+$('show-circles').onchange=()=>{if(!$('show-circles').checked)$('emphasize-circles').checked=false;draw();};
+$('emphasize-circles').onchange=()=>{if($('emphasize-circles').checked)$('show-circles').checked=true;draw();};
+if($('parameter-panel')){
+ const panel=$('parameter-panel');
+ $('open-settings').onclick=()=>{panel.showModal();panel.scrollTop=0;};
+ $('close-settings').onclick=()=>panel.close();
+ panel.addEventListener('click',event=>{if(event.target!==panel)return;const r=panel.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)panel.close();});
+}
 new ResizeObserver(resize).observe(canvas);document.addEventListener('visibilitychange',()=>{last=0;});
 mapsUI();choose(country);requestAnimationFrame(frame);
 })();
