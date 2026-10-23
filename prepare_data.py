@@ -54,7 +54,7 @@ for rank,(code,name,population) in enumerate(province_choices,1):
 # Museum motif tracings. Closed contours are kept separate so no false connecting lines appear.
 artwork=json.loads((base/'artwork-contours.json').read_text())
 for motif in artwork['items']:
- item=make_map(motif['id'],motif['name'],motif['en'],0,0,[([points],None) for points in motif['contours']],'complex','上海博物馆 · 汉代四神瓦当纹样 · 轮廓提取与简化',planar=True)
+ item=make_map(motif['id'],motif['name'],motif['en'],0,0,[([points],None) for points in motif['contours']],'complex','上海博物馆 · 汉代四神瓦当纹样 · 单笔外轮廓',planar=True)
  item['source']=artwork['source']
  out.append(item)
 (base/'dist/countries.js').write_text('window.ATLAS_COUNTRIES='+json.dumps(out,ensure_ascii=False,separators=(',',':'))+';\n')

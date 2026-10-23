@@ -33,10 +33,10 @@ npm run deploy:check
 npm run deploy
 ```
 
-Cloudflare Workers · `xiaosang.cc/fourier-atlas/` · v1.0.1
+Cloudflare Workers · `xiaosang.cc/fourier-atlas/` · v1.0.2
 
 源码与部署配置统一使用 `main`，从同一提交手动发布。生产资源位于 `dist/`，无需构建。用 NumPy 运行 `prepare_data.py` 可重新生成傅里叶系数。
 
 Source and deployment configuration share `main`. Deploy manually from the same commit. The buildless static output lives in `dist/`. Run `prepare_data.py` with NumPy to regenerate coefficients.
 
-四神瓦当轮廓依据[上海博物馆公开导赏图](https://m.thepaper.cn/baijiahao_20218955)提取并简化；并非文物的精确复刻。 / Guardian motifs are simplified contour tracings based on Shanghai Museum’s published guide images.
+四神瓦当轮廓依据[上海博物馆公开导赏图](https://m.thepaper.cn/baijiahao_20218955)提取并简化，每个纹样只绘制一条外轮廓；并非文物的精确复刻。 / Guardian motifs use a single outer contour each, traced based on Shanghai Museum’s published guide images.

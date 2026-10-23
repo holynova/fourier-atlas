@@ -27,7 +27,7 @@
 </section>
 <section class="evolution" aria-label="不同圆数量的轮廓对比"><h2 class="sr-only">不同圆数的轮廓对比</h2><div id="stages" class="stages"></div></section>
 <details class="explanation" id="principle"><summary>原理</summary><section class="principle"><div class="principle-title"><h2>傅里叶本轮绘图</h2><p class="formula">z(t) = c₀ + Σ cₖ e<sup>i2πkt</sup></p></div><div class="principle-steps"><article><span>01</span><div><h3>把边界变成一串点</h3><p>沿地图边界或图案轮廓等距采样，把每个点的位置写成复数：横坐标 + i × 纵坐标。</p></div></article><article><span>02</span><div><h3>让每个频率变成一个圆</h3><p>离散傅里叶变换算出不同频率的旋转向量：长度决定圆的半径，频率决定转速和方向，相位决定起始角度。</p></div></article><article><span>03</span><div><h3>叠加旋转，留下轨迹</h3><p>将向量首尾相接，末端就是笔尖。按振幅从大到小逐个加入，逐步减小对采样轮廓的均方误差，显现更多细节。</p></div></article></div></section>
-<p class="motif-source">四神纹样据上海博物馆公开导赏图提取并简化。<a href="https://m.thepaper.cn/baijiahao_20218955" target="_blank" rel="noopener">参考图</a></p></details>
-<footer class="release-footer"><a href="https://github.com/holynova/fourier-atlas" target="_blank" rel="noopener">GitHub</a><span>v1.0.1</span></footer>
+<p class="motif-source">四神纹样据上海博物馆公开导赏图提取并简化，每个纹样只绘制一条外轮廓。<a href="https://m.thepaper.cn/baijiahao_20218955" target="_blank" rel="noopener">参考图</a></p></details>
+<footer class="release-footer"><a href="https://github.com/holynova/fourier-atlas" target="_blank" rel="noopener">GitHub</a><span>v1.0.2</span></footer>
 </main>
 </body></html>
