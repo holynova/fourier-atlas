@@ -33,7 +33,7 @@ npm run deploy:check
 npm run deploy
 ```
 
-Cloudflare Workers · `xiaosang.cc/fourier-atlas/` · v1.0.2
+Cloudflare Workers · `xiaosang.cc/fourier-atlas/` · v1.0.3
 
 源码与部署配置统一使用 `main`，从同一提交手动发布。生产资源位于 `dist/`，无需构建。用 NumPy 运行 `prepare_data.py` 可重新生成傅里叶系数。
 

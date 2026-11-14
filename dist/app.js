@@ -5,7 +5,7 @@ const canvas=$('drawing'),ctx=canvas.getContext('2d'),historyLayer=document.crea
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const groups={world:'countries',province:'provinces',complex:'complex-shapes'};
 const lastSelections=Object.fromEntries(Object.keys(groups).map(g=>[g,maps.find(c=>c.group===g)]));
-const color={trace:'#8cdeba',pen:'#edac7e',circle:'#9bbfa8',original:'#8fa996'};
+const color={trace:'#8cdeba',pen:'#e8836f',circle:'#9bbfa8',original:'#8fa996'};
 const initialShape=new URLSearchParams(location.search).get('shape')||document.body.dataset.defaultShape;
 let country=maps.find(c=>c.id===initialShape)||maps[0],count=1,phase=0,running=!reduced,last=0,curves=[],camera=null,width=0,height=0,dpr=1;
 let history=[],historyDirty=true,historyPainted=0,fixedIncrement=5;
@@ -79,7 +79,7 @@ function choose(c){
  if($('clean-view'))$('clean-view').href='pure.html?shape='+encodeURIComponent(c.id);
  if($('full-view'))$('full-view').href='./?shape='+encodeURIComponent(c.id);
  $('country-name').textContent=c.fullName;$('drawing').setAttribute('aria-label',c.fullName+'傅里叶轮廓绘图。'+c.note+'。虚线为原始轮廓，浅色实线为已完成的历史轮廓，亮绿色实线为当前轨迹。');
- $('country-note').textContent=c.rings.length+' 条独立轮廓 · '+c.note;
+ $('country-note').textContent=c.rings.length+' 条独立轮廓，'+c.note;
  document.querySelectorAll('.country').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.country===c.id)));
  buildCurves();stagesUI();resize();updateControls();announce('已切换至'+c.name+'。从每条轮廓 1 个旋转圆开始，每圈增加 '+increment()+' 个，至 '+maxTerms()+' 个。');
 }
@@ -100,9 +100,9 @@ function draw(){
  country.rings.forEach((r,index)=>{
   const tip=endpoint(r,count,phase,$('show-circles').checked?(x,y,nx,ny,radius)=>{
    if(radius*p.scale<.4)return;
-   if(radius*p.scale>.6){ctx.globalAlpha=$('emphasize-circles').checked?(index===0?.78:.22):.22;ctx.strokeStyle=$('emphasize-circles').checked&&index===0?'#e6b77d':color.circle;ctx.lineWidth=$('emphasize-circles').checked&&index===0?1.25:.75;ctx.beginPath();ctx.arc(p.x+x*p.scale,p.y+y*p.scale,radius*p.scale,0,TAU);ctx.stroke();}
-   ctx.globalAlpha=$('emphasize-circles').checked&&index===0?.86:.43;ctx.strokeStyle=$('emphasize-circles').checked&&index===0?'#efd5ad':color.circle;ctx.lineWidth=$('emphasize-circles').checked&&index===0?1:.8;ctx.beginPath();ctx.moveTo(p.x+x*p.scale,p.y+y*p.scale);ctx.lineTo(p.x+nx*p.scale,p.y+ny*p.scale);ctx.stroke();
-   if($('emphasize-circles').checked&&index===0&&radius*p.scale>1.5){ctx.beginPath();ctx.arc(p.x+x*p.scale,p.y+y*p.scale,1.6,0,TAU);ctx.fillStyle='#efd5ad';ctx.fill();}
+   if(radius*p.scale>.6){ctx.globalAlpha=$('emphasize-circles').checked?(index===0?.78:.22):.22;ctx.strokeStyle=$('emphasize-circles').checked&&index===0?'#d8f5e3':color.circle;ctx.lineWidth=$('emphasize-circles').checked&&index===0?1.25:.75;ctx.beginPath();ctx.arc(p.x+x*p.scale,p.y+y*p.scale,radius*p.scale,0,TAU);ctx.stroke();}
+   ctx.globalAlpha=$('emphasize-circles').checked&&index===0?.86:.43;ctx.strokeStyle=$('emphasize-circles').checked&&index===0?'#b4f4d4':color.circle;ctx.lineWidth=$('emphasize-circles').checked&&index===0?1:.8;ctx.beginPath();ctx.moveTo(p.x+x*p.scale,p.y+y*p.scale);ctx.lineTo(p.x+nx*p.scale,p.y+ny*p.scale);ctx.stroke();
+   if($('emphasize-circles').checked&&index===0&&radius*p.scale>1.5){ctx.beginPath();ctx.arc(p.x+x*p.scale,p.y+y*p.scale,1.6,0,TAU);ctx.fillStyle='#b4f4d4';ctx.fill();}
   }:null);
   ctx.globalAlpha=1;const end=Math.floor(phase*SAMPLES);drawLine(ctx,curves[index],p,end,color.trace,1.9);
   if(end<SAMPLES){ctx.beginPath();ctx.moveTo(p.x+curves[index][end*2]*p.scale,p.y+curves[index][end*2+1]*p.scale);ctx.lineTo(p.x+tip[0]*p.scale,p.y+tip[1]*p.scale);ctx.strokeStyle=color.trace;ctx.lineWidth=1.9;ctx.stroke();}

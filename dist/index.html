@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>傅里叶地图实验室 · 用旋转的圆描绘世界</title>
+<title>傅里叶地图实验室 — 用旋转的圆描绘世界</title>
 <meta name="description" content="从一个旋转圆开始，步长随圆数渐增，默认到 512 个圆，最高 1024 个圆。探索十国地图、人口前十省区和四神瓦当纹样，保留浅色历史轨迹。可交互的傅里叶本轮绘图实验。">
 <meta name="theme-color" content="#101716"><meta property="og:title" content="傅里叶地图实验室"><meta property="og:description" content="一个圆，一个世界。从圆周运动到国家轮廓，亲眼看见傅里叶级数的渐进逼近。"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css">
 <script src="countries.js" defer></script><script src="app.js" defer></script>
@@ -12,12 +12,13 @@
 <body>
 <header class="masthead"><a class="brand" href="./" aria-label="傅里叶地图实验室首页"><span class="brand-mark" aria-hidden="true">◎</span><span>FOURIER <b>ATLAS</b></span></a><a class="clean-link" id="clean-view" href="pure.html">纯净模式</a></header>
 <main>
-<section class="intro"><h1>用旋转的圆，<br class="mobile-break">描绘世界<span>。</span></h1></section>
+<section class="intro"><h1>用旋转的圆，<br class="mobile-break">描绘世界<span>。</span></h1><p class="subtitle">选一个地图，看旋转的圆一圈圈把它画出来——圆越多，轮廓越像。点下面的圆数卡片，可以直接跳到任意阶段。</p></section>
 <section class="lab" aria-label="傅里叶地图交互实验">
-<aside class="sidebar"><div class="map-groups" role="group" aria-label="地图分类"><button type="button" data-group="world" aria-pressed="true" aria-controls="countries">世界国家</button><button type="button" data-group="province" aria-pressed="false" aria-controls="provinces">中国省区</button><button type="button" data-group="complex" aria-pressed="false" aria-controls="complex-shapes">四神瓦当</button></div><div id="countries" class="country-grid" role="group" aria-label="选择国家"></div><div id="provinces" class="country-grid province-grid" role="group" aria-label="选择中国省级行政区" hidden></div><p id="group-note" class="group-note" hidden>2024 年末常住人口前 10 · 万人</p><div id="complex-shapes" class="country-grid complex-grid" role="group" aria-label="选择四神瓦当纹样" hidden></div><p id="country-note" class="sr-only"></p></aside>
+<aside class="sidebar"><div class="map-groups" role="group" aria-label="地图分类"><button type="button" data-group="world" aria-pressed="true" aria-controls="countries">世界国家</button><button type="button" data-group="province" aria-pressed="false" aria-controls="provinces">中国省区</button><button type="button" data-group="complex" aria-pressed="false" aria-controls="complex-shapes">四神瓦当</button></div><div id="countries" class="country-grid" role="group" aria-label="选择国家"></div><div id="provinces" class="country-grid province-grid" role="group" aria-label="选择中国省级行政区" hidden></div><p id="group-note" class="group-note" hidden>2024 年末常住人口前 10（单位：万人）</p><div id="complex-shapes" class="country-grid complex-grid" role="group" aria-label="选择四神瓦当纹样" hidden></div><p id="country-note" class="sr-only"></p></aside>
 <div class="experiment">
 <div class="canvas-header"><h2 id="country-name">中国</h2><div class="live-state sr-only"><span id="state-dot"></span><span id="state-text">渐进绘制中</span></div></div>
 <div class="canvas-wrap"><canvas id="drawing" role="img" aria-label="旋转圆叠加绘制国家轮廓，虚线为原始地理轮廓，绿色实线为重建轨迹。">你的浏览器不支持 Canvas，请使用新版浏览器。</canvas></div>
+<div class="plot-legend" aria-hidden="true"><span><span class="legend-line dashed"></span>原始轮廓</span><span><span class="legend-line history"></span>历史轨迹</span><span><span class="legend-line trace"></span>当前轨迹</span><span><span class="legend-point"></span>笔尖</span></div>
 
 <div class="playback"><button type="button" id="play" class="primary">暂停</button><button type="button" id="restart" class="secondary" aria-label="从一个旋转圆重新开始">重新开始</button><div class="lap-track" aria-hidden="true"><div id="lap-fill"></div></div><span class="lap-value" id="lap-value">0%</span><button type="button" class="secondary" id="next" aria-label="完成本圈并进入下一圈">下一圈 →</button></div>
 <div class="settings"><label class="range-label"><span>圆数（每条轮廓） <output id="terms-output" for="terms">1</output></span><input id="terms" type="range" min="1" max="512" value="1"></label><label class="range-label speed-label"><span>每圈用时 <output id="speed-output" for="speed">2.5 秒</output></span><input id="speed" type="range" min="0.5" max="6" step="0.5" value="2.5"></label></div>
@@ -25,9 +26,9 @@
 <p class="sr-only" id="status" aria-live="polite">正在用 1 个旋转圆描绘中国。</p>
 </div>
 </section>
-<section class="evolution" aria-label="不同圆数量的轮廓对比"><h2 class="sr-only">不同圆数的轮廓对比</h2><div id="stages" class="stages"></div></section>
+<section class="evolution" aria-label="不同圆数量的轮廓对比"><h2 class="stages-title">圆越多，轮廓越像</h2><div id="stages" class="stages"></div></section>
 <details class="explanation" id="principle"><summary>原理</summary><section class="principle"><div class="principle-title"><h2>傅里叶本轮绘图</h2><p class="formula">z(t) = c₀ + Σ cₖ e<sup>i2πkt</sup></p></div><div class="principle-steps"><article><span>01</span><div><h3>把边界变成一串点</h3><p>沿地图边界或图案轮廓等距采样，把每个点的位置写成复数：横坐标 + i × 纵坐标。</p></div></article><article><span>02</span><div><h3>让每个频率变成一个圆</h3><p>离散傅里叶变换算出不同频率的旋转向量：长度决定圆的半径，频率决定转速和方向，相位决定起始角度。</p></div></article><article><span>03</span><div><h3>叠加旋转，留下轨迹</h3><p>将向量首尾相接，末端就是笔尖。按振幅从大到小逐个加入，逐步减小对采样轮廓的均方误差，显现更多细节。</p></div></article></div></section>
 <p class="motif-source">四神纹样据上海博物馆公开导赏图提取并简化，每个纹样只绘制一条外轮廓。<a href="https://m.thepaper.cn/baijiahao_20218955" target="_blank" rel="noopener">参考图</a></p></details>
-<footer class="release-footer"><a href="https://github.com/holynova/fourier-atlas" target="_blank" rel="noopener">GitHub</a><span>v1.0.2</span></footer>
+<footer class="release-footer"><a href="https://github.com/holynova/fourier-atlas" target="_blank" rel="noopener">GitHub</a><span>v1.0.3</span></footer>
 </main>
 </body></html>
