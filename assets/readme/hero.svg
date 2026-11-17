@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200" height="360" viewBox="0 0 1200 360"
+     role="img" aria-labelledby="title desc">
+  <title id="title">傅里叶地图实验室 Fourier Atlas — 用旋转的圆，描绘世界</title>
+  <desc id="desc">深绿底标题：傅里叶地图实验室；右侧是嵌套旋转圆示意：三个圆环环相扣，笔尖描出一条起伏的轮廓线。</desc>
+
+  <rect width="1200" height="360" rx="26" fill="#0a0f0d"/>
+
+  <g id="title-block" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+    <text x="56" y="62" font-size="19" letter-spacing="3" fill="#7fe8c0">FOURIER EPICYCLES · 旋转圆描绘世界</text>
+    <text x="56" y="128" font-size="62" font-weight="700" fill="#f2f4f8">傅里叶地图实验室</text>
+    <text x="56" y="168" font-size="23" fill="#c8d0dc">FOURIER ATLAS — 用旋转的圆，描绘世界。</text>
+    <text x="56" y="204" font-size="19" fill="#98a4b3">24 幅轮廓：10 国、人口前十省区与四神瓦当，最多 1024 个圆。</text>
+    <g id="chips" font-size="18" fill="#dfe5ee" text-anchor="middle">
+      <g><rect x="56" y="238" width="120" height="36" rx="18" fill="#12201a" stroke="#24402f" stroke-width="1.5"/><text x="116" y="262">24 幅轮廓</text></g>
+      <g><rect x="188" y="238" width="156" height="36" rx="18" fill="#12201a" stroke="#24402f" stroke-width="1.5"/><text x="266" y="262">最多 1024 个圆</text></g>
+      <g><rect x="356" y="238" width="144" height="36" rx="18" fill="#12201a" stroke="#24402f" stroke-width="1.5"/><text x="428" y="262">默认终点 512</text></g>
+      <g><rect x="512" y="238" width="108" height="36" rx="18" fill="#12201a" stroke="#24402f" stroke-width="1.5"/><text x="566" y="262">纯净模式</text></g>
+    </g>
+  </g>
+
+  <g id="epicycles" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+    <!-- traced outline -->
+    <path d="M 800 210 C 780 150, 830 110, 880 118 C 910 80, 980 74, 1000 108 C 1060 96, 1110 130, 1096 178 C 1130 200, 1110 260, 1060 262 C 1050 310, 980 322, 950 292 C 900 320, 830 300, 836 256 C 790 250, 812 240, 800 210 Z"
+          fill="none" stroke="#7fe8c0" stroke-width="2.5"/>
+    <!-- epicycle chain -->
+    <circle cx="940" cy="185" r="100" fill="none" stroke="#7fe8c0" stroke-width="1.5" opacity="0.45"/>
+    <circle cx="1027" cy="135" r="50" fill="none" stroke="#7fe8c0" stroke-width="1.5" opacity="0.6"/>
+    <circle cx="1052" cy="178" r="24" fill="none" stroke="#7fe8c0" stroke-width="1.5" opacity="0.8"/>
+    <line x1="940" y1="185" x2="1027" y2="135" stroke="#7fe8c0" stroke-width="1.5" opacity="0.7"/>
+    <line x1="1027" y1="135" x2="1052" y2="178" stroke="#7fe8c0" stroke-width="1.5" opacity="0.7"/>
+    <line x1="1052" y1="178" x2="1076" y2="178" stroke="#7fe8c0" stroke-width="1.5" opacity="0.9"/>
+    <circle cx="940" cy="185" r="4" fill="#7fe8c0"/>
+    <circle cx="1027" cy="135" r="4" fill="#7fe8c0"/>
+    <circle cx="1052" cy="178" r="4" fill="#7fe8c0"/>
+    <circle cx="1076" cy="178" r="6" fill="#ffb066"/>
+    <text x="960" y="342" font-size="18" fill="#7fe8c0" text-anchor="middle">1 个圆是圆，512 个圆是青龙</text>
+  </g>
+</svg>
